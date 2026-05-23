@@ -1,0 +1,126 @@
+D: MemoryMapped Read offset: 0x903fffe0, len: 1
+I: Image index: 0, Swap type: test
+D: boot_validate_slot: slot 1, expected_swap_type 2
+D: bootutil_img_validate: flash area 0x8010000
+D: bootutil_img_hash
+D: bootutil_tlv_iter_begin: type 65535, prot == 0
+D: bootutil_img_validate: TLV off 991852, end 991888
+D: bootutil_tlv_iter_next: searching for 65535 (65535 is any) starting at 991852 ending at 991888
+D: bootutil_tlv_iter_next: TLV 16 found at 991856 (size 32)
+D: bootutil_img_validate: EXPECTED_HASH_TLV == 16
+D: bootutil_tlv_iter_next: searching for 65535 (65535 is any) starting at 991888 ending at 991888
+D: bootutil_tlv_iter_next: TLV 65535 not found
+D: MemoryMapped Read offset: 0x900f2268, len: 4
+I: Starting swap using scratch algorithm.
+D: erasing scratch area
+D: boot_erase_region: flash_area 0x8010020, offset 0, size 65536, backwards == 0
+D: boot_erase_region: device with erase
+
+mcuboot:~$ D: initializing status; fa_id=4
+D: writing swap_info; fa_id=4 off=0xffc0 (0xf0ffc0), swap_type=0x2 image_num=0x0
+D: boot_write_trailer: for 0x8010020 at 65472, size = 1
+D: writing swap_size; fa_id=4 off=0xffb0 (0xf0ffb0)
+D: boot_write_trailer: for 0x8010020 at 65456, size = 4
+D: boot_write_magic: fa_id=4 off=0xfff0 (0xf0fff0)
+D: swap_scramble_trailer_sectors: fa_id=5
+D: boot_trailer_scramble_offset: flash_area 0x8010030, alignment 1
+D: boot_trailer_scramble_offset: final alignment 1, offset 4190208
+D: boot_scramble_region: 0x8010030 4190208 4096 1
+D: boot_erase_region: flash_area 0x8010030, offset 4190208, size 4096, backwards == 1
+D: boot_erase_region: device with erase
+
+flash_stm32_ospi_erase addr 4190208
+cmd_erase = {OSPI_RegularCmdTypeDef}
+ OperationType = {uint32_t} 0
+ FlashId = {uint32_t} 0
+ Instruction = {uint32_t} 0
+ InstructionMode = {uint32_t} 0
+ InstructionSize = {uint32_t} 0
+ InstructionDtrMode = {uint32_t} 0
+ Address = {uint32_t} 0
+ AddressMode = {uint32_t} 0
+ AddressSize = {uint32_t} 0
+ AddressDtrMode = {uint32_t} 0
+ AlternateBytes = {uint32_t} 0
+ AlternateBytesMode = {uint32_t} 0
+ AlternateBytesSize = {uint32_t} 0
+ AlternateBytesDtrMode = {uint32_t} 0
+ DataMode = {uint32_t} 0
+ NbData = {uint32_t} 0
+ DataDtrMode = {uint32_t} 0
+ DummyCycles = {uint32_t} 0
+ DQSMode = {uint32_t} 0
+ SIOOMode = {uint32_t} 0
+
+cmd_erase = {OSPI_RegularCmdTypeDef}
+ OperationType = {uint32_t} 0
+ FlashId = {uint32_t} 0
+ Instruction = {uint32_t} 0
+ InstructionMode = {uint32_t} 1
+ InstructionSize = {uint32_t} 0
+ InstructionDtrMode = {uint32_t} 0
+ Address = {uint32_t} 4190208
+ AddressMode = {uint32_t} 256
+ AddressSize = {uint32_t} 8192
+ AddressDtrMode = {uint32_t} 0
+ AlternateBytes = {uint32_t} 0
+ AlternateBytesMode = {uint32_t} 0
+ AlternateBytesSize = {uint32_t} 0
+ AlternateBytesDtrMode = {uint32_t} 0
+ DataMode = {uint32_t} 0
+ NbData = {uint32_t} 0
+ DataDtrMode = {uint32_t} 0
+ DummyCycles = {uint32_t} 0
+ DQSMode = {uint32_t} 0
+ SIOOMode = {uint32_t} 0
+
+ D: Sector/Block Erase addr 0x3ff000, asize 0x2000 amode 0x100  instr 0x20
+D: Instruction 0x20
+D: CCR 0x2101
+D: Status Match cb
+D: initializing status; fa_id=5
+D: writing swap_info; fa_id=5 off=0x3fffc0 (0x3fffc0), swap_type=0x2 image_num=0x0
+D: boot_write_trailer: for 0x8010030 at 4194240, size = 1
+D: OSPI: write 1 data
+D: Status Match cb
+D: Status Match cb
+D: Instruction 0x38
+D: Tx Cplt cb
+D: Status Match cb
+D: writing swap_size; fa_id=5 off=0x3fffb0 (0x3fffb0)
+D: boot_write_trailer: for 0x8010030 at 4194224, size = 4
+D: OSPI: write 4 data
+D: Status Match cb
+D: Status Match cb
+D: Instruction 0x38
+D: Tx Cplt cb
+D: Status Match cb
+D: boot_write_magic: fa_id=5 off=0x3ffff0 (0x3ffff0)
+D: OSPI: write 16 data
+D: Status Match cb
+D: Status Match cb
+D: Instruction 0x38
+D: Tx Cplt cb
+D: Status Match cb
+D: boot_erase_region: flash_area 0x8010020, offset 0, size 65536, backwards == 0
+D: boot_erase_region: device with erase
+D: writing swap status; fa_id=5 off=0x3ff3b0 (0x3ff3b0)
+D: OSPI: write 1 data
+D: Status Match cb
+D: Status Match cb
+D: Instruction 0x38
+D: Tx Cplt cb
+D: Status Match cb
+D: swap_scramble_trailer_sectors: fa_id=2
+D: boot_trailer_scramble_offset: flash_area 0x8010000, alignment 1
+D: boot_trailer_scramble_offset: final alignment 1, offset 4128768
+D: boot_scramble_region: 0x8010000 4128768 65536 1
+D: boot_erase_region: flash_area 0x8010000, offset 4128768, size 65536, backwards == 1
+D: boot_erase_region: device with erase
+D: boot_erase_region: flash_area 0x8010000, offset 983040, size 65536, backwards == 0
+D: boot_erase_region: device with erase
+D: MemoryMap mode enabled
+D: MemoryMapped Read offset: 0x900f0000, len: 1024
+D: MemoryMapped Read offset: 0x900f0400, len: 1024
+D: MemoryMapped Read offset: 0x900f0800, len: 1024
+

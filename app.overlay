@@ -1,0 +1,36 @@
+/ {
+	chosen {
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &boot_partition;
+	};
+};
+
+&clk_lse {
+	clock-frequency = <32768>;
+	status = "okay";
+};
+
+&{/uart-bridge0} {
+	status = "disabled";
+};
+
+//
+//&flash0 {
+//	partitions {
+//		compatible = "fixed-partitions";
+//		#address-cells = <1>;
+//		#size-cells = <1>;
+//
+//		boot_partition: partition@0 {
+//			label = "mcuboot";
+//			reg = <0x00000000 0x00020000>; /* 128 KB */
+//		};
+//
+//		slot0_partition: partition@20000 {
+//			label = "image-2";
+//			reg = <0x00020000 0x001E0000>; /* 1920 KB */
+//		};
+//	};
+//};
+//
+///delete-node/ &octospi1;

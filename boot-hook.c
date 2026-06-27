@@ -17,6 +17,7 @@
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/bbram.h>
+#include <zephyr/drivers/mspi.h>
 
 BOOT_LOG_MODULE_REGISTER(boot_hook);
 
@@ -89,6 +90,61 @@ static void boot_configure_alias_9000_to_0200(void)
 #endif
 }
 
+static void boot_check_psram(void)
+{
+	volatile uint8_t *p8 = (volatile uint8_t *)0x70000000U;
+
+	BOOT_LOG_INF("PSRAM 0x70000000..0x7000001F:");
+	BOOT_LOG_INF(
+		"%02x %02x %02x %02x %02x %02x %02x %02x "
+		"%02x %02x %02x %02x %02x %02x %02x %02x",
+		p8[0],  p8[1],  p8[2],  p8[3],
+		p8[4],  p8[5],  p8[6],  p8[7],
+		p8[8],  p8[9],  p8[10], p8[11],
+		p8[12], p8[13], p8[14], p8[15]);
+	BOOT_LOG_INF(
+		"%02x %02x %02x %02x %02x %02x %02x %02x "
+		"%02x %02x %02x %02x %02x %02x %02x %02x",
+		p8[16], p8[17], p8[18], p8[19],
+		p8[20], p8[21], p8[22], p8[23],
+		p8[24], p8[25], p8[26], p8[27],
+		p8[28], p8[29], p8[30], p8[31]);
+
+	/* Write/read test at offset 0x1000 to avoid stomping on address 0 */
+	static const uint32_t wr[8] = {
+		0xDEADBEEF, 0xCAFEBABE, 0x12345678, 0x9ABCDEF0,
+		0x55AA55AA, 0xAA55AA55, 0x0F0F0F0F, 0xF0F0F0F0,
+	};
+	volatile uint32_t *t = (volatile uint32_t *)(0x70000000U + 0x1000U);
+
+	for (int i = 0; i < 8; i++) {
+		t[i] = wr[i];
+	}
+	__DSB();
+
+	/* Invalidate D-cache for the test region so the readback comes
+	 * from actual PSRAM, not a dirty cache line.
+	 */
+	sys_cache_data_flush_and_invd_range((void *)t, 32);
+
+	bool ok = true;
+
+	for (int i = 0; i < 8; i++) {
+		if (t[i] != wr[i]) {
+			BOOT_LOG_ERR("PSRAM[+0x%04x] wrote=0x%08x read=0x%08x",
+				     0x1000 + i * 4, wr[i], t[i]);
+			ok = false;
+		}
+	}
+
+	if (ok) {
+		BOOT_LOG_INF("PSRAM write/read: PASS");
+	} else {
+		BOOT_LOG_ERR("PSRAM write/read: FAIL");
+	}
+}
+
+
 static void boot_confirm_from_bbram_pattern(void)
 {
 #if DT_NODE_EXISTS(DT_NODELABEL(bbram)) && DT_NODE_HAS_STATUS(DT_NODELABEL(bbram), okay)
@@ -148,5 +204,6 @@ fih_ret boot_go_hook(struct boot_rsp *rsp)
 
     boot_confirm_from_bbram_pattern();
     boot_configure_alias_9000_to_0200();
+    boot_check_psram();
     return FIH_BOOT_HOOK_REGULAR;
 }
